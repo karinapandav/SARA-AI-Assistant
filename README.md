@@ -10,10 +10,20 @@ SARA is a personalized AI assistant that adapts to user behavior, preferences, a
 - Weekly user insights
 - Feedback-driven learning
 
+## Core Capabilities
+
+- Context-aware AI conversations
+- Persistent memory architecture
+- Adaptive preference learning
+- Behavioral interaction logging
+- Personalized recommendations
+- AI-generated productivity insights
+- Modern conversational dashboard UI
+
 ## Tech Stack
 - Python
 - Streamlit
-- OpenAI API
+- Groq API
 - JSON Memory Storage
 
 ## Vision
