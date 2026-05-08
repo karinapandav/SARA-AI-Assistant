@@ -1,11 +1,19 @@
 {
-  "preferences": {
-    "style": "minimal beige",
-    "diet": "vegetarian"
-  },
-  "goals": [
-    "weight gain",
-    "career growth"
-  ],
-  "feedback": []
+    "preferences": {
+        "style": "minimal beige",
+        "diet": "vegetarian",
+        "personality": "organized",
+        "FAVOURITE COLOUR": "WHITE, PINK",
+        "FAVOURITE FOOD": "PAV BHAJI"
+    },
+    "goals": [
+        "weight gain",
+        "career growth",
+        "build SARA successfully"
+    ],
+    "habits": [
+        "college 9-4",
+        "likes aesthetic outfits"
+    ],
+    "feedback": []
 }

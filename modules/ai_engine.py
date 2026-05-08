@@ -2,7 +2,7 @@ from groq import Groq
 from dotenv import load_dotenv
 import os
 import json
-
+from modules.feedback import add_log
 load_dotenv()
 
 client = Groq(
@@ -58,8 +58,10 @@ Give a personalized response.
                 }
             ]
         )
+        reply = response.choices[0].message.content
 
-        return response.choices[0].message.content
+        add_log(user_query, reply)
+        return reply
 
     except Exception as e:
         return f"Error: {str(e)}"
