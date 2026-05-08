@@ -2,90 +2,156 @@ import streamlit as st
 from modules.ai_engine import ask_sara
 from modules.memory import add_preference
 from modules.feedback import load_logs
+from modules.insights import generate_insights
 
-st.set_page_config(
-    page_title="SARA",
-    layout="wide"
-)
+
+st.markdown("""
+<style>
+
+html, body, [class*="css"] {
+    font-family: 'Inter', sans-serif;
+}
+
+.main {
+    background-color: #0B0F19;
+    color: white;
+}
+
+section[data-testid="stSidebar"] {
+    background-color: #111827;
+    border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+.stTextInput input {
+    background-color: #1F2937 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 14px !important;
+    padding: 14px !important;
+}
+
+.stButton button {
+    background-color: #2563EB;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0.6rem 1rem;
+    font-weight: 500;
+}
+
+.response-card {
+    background: #111827;
+    padding: 24px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.05);
+    margin-top: 20px;
+}
+
+.small-label {
+    color: #9CA3AF;
+    font-size: 0.9rem;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 # =========================
 # HEADER
 # =========================
 
-st.title("SARA — Smart Adaptive Response Assistant")
-st.caption("Built around you.")
-st.info(
-    "SARA learns from your preferences, habits, and interactions to become more personalized over time."
+st.markdown(
+    """
+    <h1 style='font-size: 3rem; margin-bottom:0;'>
+    SARA
+    </h1>
+
+    <p style='color: #9CA3AF; font-size: 1.1rem; margin-top:0;'>
+    Smart Adaptive Response Assistant
+    </p>
+    """,
+    unsafe_allow_html=True
 )
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.metric(
+        "Memory Entries",
+        len(load_logs())
+    )
+
+with col2:
+    st.metric(
+        "Personalization",
+        f"{min(len(load_logs()) * 10, 100)}%"
+    )
+
+with col3:
+    st.metric(
+        "Assistant Status",
+        "Active"
+    )
+
+st.markdown("### Ask SARA")
+
+query = st.text_input(
+    "",
+    placeholder="Ask SARA anything..."
+)
+
+if st.button("Send"):
+
+    if query:
+
+        with st.spinner("Thinking..."):
+
+            response = ask_sara(query)
+
+            st.session_state["response"] = response
 # =========================
 # SIDEBAR
 # =========================
-
 with st.sidebar:
 
-    st.header("SARA Dashboard")
+    st.markdown("## ✨ SARA")
+
+    st.caption("Built around you")
 
     st.markdown("---")
 
-    st.subheader("Quick Actions")
+    st.markdown("### Quick Actions")
 
     if st.button("Plan My Day"):
-
-        response = ask_sara(
-            "Create a productive and balanced daily plan for me."
+        st.session_state["response"] = ask_sara(
+            "Create a productive plan for my day."
         )
 
-        st.session_state["response"] = response
-
-    if st.button("👗 Outfit Suggestion"):
-
-        response = ask_sara(
-            "Suggest an outfit for my day."
+    if st.button("Outfit Suggestion"):
+        st.session_state["response"] = ask_sara(
+            "Suggest an outfit for today."
         )
-
-        st.session_state["response"] = response
 
     if st.button("Meal Suggestion"):
-
-        response = ask_sara(
-            "Suggest vegetarian meals for weight gain."
+        st.session_state["response"] = ask_sara(
+            "Suggest healthy vegetarian meals."
         )
-
-        st.session_state["response"] = response
 
     st.markdown("---")
 
-    st.subheader("Teach SARA")
+    st.markdown("### Teach SARA")
 
-    preference_type = st.text_input("Preference Type")
-    preference_value = st.text_input("Preference Value")
+    preference_type = st.text_input("Type")
 
-    if st.button("Save Preference"):
+    preference_value = st.text_input("Value")
+
+    if st.button("Save"):
 
         add_preference(
             preference_type,
             preference_value
         )
 
-        st.success("SARA learned something new!")
-
-# =========================
-# MAIN CHAT
-# =========================
-
-st.subheader("Talk to SARA")
-
-query = st.text_input(
-    "Ask anything..."
-)
-
-if st.button("Send"):
-
-    with st.spinner("SARA is thinking..."):
-
-        response = ask_sara(query)
-
-        st.session_state["response"] = response
+        st.success("Saved")
 
 # =========================
 # RESPONSE SECTION
@@ -93,12 +159,22 @@ if st.button("Send"):
 
 if "response" in st.session_state:
 
-    st.markdown("### SARA Response")
+    st.markdown(
+        f"""
+        <div class="response-card">
 
-    st.success(
-        st.session_state["response"]
+        <div class="small-label">
+        SARA RESPONSE
+        </div>
+
+        <br>
+
+        {st.session_state["response"]}
+
+        </div>
+        """,
+        unsafe_allow_html=True
     )
-
 # =========================
 # RECENT ACTIVITY
 # =========================
@@ -117,7 +193,7 @@ if recent_logs:
 
         st.markdown(
             f"""
-** {log['time']}**
+
 
 **You:** {log['query']}
 

@@ -43,7 +43,7 @@ USER MEMORY:
 {memory}
 
 RECENT USER LOGS:
-{logs[-5:]}
+{logs[-2:]}
 
 USER QUERY:
 {user_query}

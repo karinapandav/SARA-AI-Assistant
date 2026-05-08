@@ -16,7 +16,7 @@ def save_logs(logs):
 def add_log(user_query, sara_response):
 
     logs = load_logs()
-
+    logs = logs[-20:]
     logs.append({
         "time": str(datetime.now()),
         "query": user_query,
